@@ -56,8 +56,8 @@
     ],
     "autoload": {
         "psr-0": { 
-          "ruian\\TwitterBootstrapBundle": "" 
+          "Ruian\\TwitterBootstrapBundle": "" 
         }
     },
-    "target-dir": "ruian/TwitterBootstrapBundle"
+    "target-dir": "Ruian/TwitterBootstrapBundle"
 }
