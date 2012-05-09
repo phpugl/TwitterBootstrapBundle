@@ -59,7 +59,7 @@
             "Ruian\\TwitterBootstrapBundle": ""
         },
         "classmap": [
-            "vendor/leafo/lessphp/lessc.inc.php"
+            "../../leafo/lessphp/lessc.inc.php"
         ]
     },
     "target-dir": "Ruian/TwitterBootstrapBundle"
