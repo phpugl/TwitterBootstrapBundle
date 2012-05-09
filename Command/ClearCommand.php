@@ -10,16 +10,9 @@ use Symfony\Component\Finder\Finder;
 
 class ClearCommand extends ContainerAwareCommand
 {
-    protected $versions;
-
-
     public function __construct()
     {
         parent::__construct($name = null);
-        $this->versions = array(
-            'v1',
-            'v2'
-        );
     }
 
     protected function configure()

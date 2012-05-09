@@ -55,12 +55,12 @@ class CompilerCommand extends ContainerAwareCommand
         
         lessc::ccompile($this->path_twitter . 'less/bootstrap.less', $out . 'bootstrap.css');
 
-        $output->writeln('<comment>Writing bootstrap'.$version.'.css from bootstrap.less</comment>');
+        $output->writeln('<comment>Writing bootstrap.css from bootstrap.less</comment>');
         $output->writeln('<comment>You can add bundles/ruiantwitterbootstrap/css/bootstrap.css to your layout</comment>');
 
         lessc::ccompile($this->path_twitter . 'less/responsive.less', $out . 'bootstrap-responsive.css');
 
-        $output->writeln('<comment>Writing bootstrap'.$version.'-responsive.css from responsive.less</comment>');
+        $output->writeln('<comment>Writing bootstrap-responsive.css from responsive.less</comment>');
         $output->writeln('<comment>You can add bundles/ruiantwitterbootstrap/css/bootstrap-responsive.css to your layout</comment>');
 
         return true;
@@ -81,7 +81,7 @@ class CompilerCommand extends ContainerAwareCommand
         return true;
     }
 
-    protected function writeJs($version, $output)
+    protected function writeJs($output)
     {
         $in = $this->path_twitter . 'js/';
         $out = $this->path_resources . 'js/';
