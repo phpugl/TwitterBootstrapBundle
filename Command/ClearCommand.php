@@ -26,7 +26,7 @@ class ClearCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $finder = new Finder();
-        $finder->files()->in(__DIR__ . '/../Resources/public/')->name('/(js$)|(css$)/')->sortByName();
+        $finder->files()->in(__DIR__ . '/../Resources/public/')->name('/(js$)|(css$)|(img$)/')->sortByName();
 
         foreach ($finder->files() as $file) {
             unlink($file->getRealPath());
