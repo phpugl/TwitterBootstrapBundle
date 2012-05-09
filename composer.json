@@ -56,7 +56,7 @@
     ],
     "autoload": {
         "psr-0": { 
-            "Ruian\\TwitterBootstrapBundle": "",
+            "Ruian\\TwitterBootstrapBundle": ""
         },
         "classmap": [
             "vendor/leafo/lessphp/lessc.inc.php"
