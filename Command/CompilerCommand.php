@@ -12,15 +12,14 @@ use lessc;
 
 class CompilerCommand extends ContainerAwareCommand
 {
-    protected $versions;
+    protected $path_twitter;
+    protected $path_resources;
 
     public function __construct($name = null)
     {
         parent::__construct($name);
-        $this->versions = array(
-            'v1',
-            'v2'
-        );
+        $this->path_resources = __DIR__ . '/../Resources/public/';
+        $this->path_twitter = __DIR__ . '/../../../../../twitter/bootstrap/';
     }
 
     protected function configure()
@@ -28,79 +27,55 @@ class CompilerCommand extends ContainerAwareCommand
         $this
             ->setName('twitter-bootstrap:compile')
             ->setDescription('Compile a version of twitter-bootstrap and paste it into RuianTwitterBundle public folder')
-            ->addArgument('version', InputArgument::OPTIONAL, 'Main version v1 or v2', 'v1')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $version = $input->getArgument('version');
-
-        if (false === in_array($version, $this->versions)) {
-            throw new TwitterBootstrapVersionException("Version you have selected is not supported, or inexistant. Please choose one of these versions " . implode(' or ', $this->versions));
+        if (true === $this->writeCss($output)) {
+            $output->writeln('<info>Success, bootstrap.css has been written in /Ruian/TwitterBootstrapBundle/Resources/public/css/bootstrap.css</info>');
         }
 
-        if (true === $this->writeCss($version, $output)) {
-            $output->writeln('<info>Success, bootstrap'.$version.'.css has been written in /Ruian/TwitterBootstrapBundle/Resources/public/css/bootstrap'.$version.'.css</info>');
+        if (true === $this->writeJs($output)) {
+            $output->writeln('<info>Success, bootstrap.js has been written in /Ruian/TwitterBootstrapBundle/Resources/public/js/bootstrap.js</info>');
         }
 
-        if (true === $this->writeJs($version, $output)) {
-            $output->writeln('<info>Success, bootstrap'.$version.'.js has been written in /Ruian/TwitterBootstrapBundle/Resources/public/js/bootstrap'.$version.'.js</info>');
-        }
-
-        if (true === $this->copyImages($version, $output)) {
-            $output->writeln('<info>Success, bootstrap'.$version.' images have been copied to /Ruian/TwitterBootstrapBundle/Resources/public/img</info>');
+        if (true === $this->copyImages($output)) {
+            $output->writeln('<info>Success, bootstrap images have been copied to /Ruian/TwitterBootstrapBundle/Resources/public/img</info>');
         }
     }
 
-    protected function writeCss($version, $output)
+    protected function writeCss($output)
     {
-        if (!is_dir(__DIR__ . '/../Resources/public/css/')) {
-            mkdir(__DIR__ . '/../Resources/public/css/', 0777, true);
+        $out = $this->path_resources . 'css/';
+    
+        if (!is_dir($out)) {
+            mkdir($out, 0777, true);
         }
+        
+        lessc::ccompile($this->path_twitter . 'less/bootstrap.less', $out . 'bootstrap.css');
 
-        if ('v1' === $version) {
-            $in = __DIR__ . '/../../../../twitter/bootstrap/'.$version.'/lib/bootstrap.less';
-            $out = __DIR__ . '/../Resources/public/css/bootstrap' . $version . '.css';
+        $output->writeln('<comment>Writing bootstrap'.$version.'.css from bootstrap.less</comment>');
+        $output->writeln('<comment>You can add bundles/ruiantwitterbootstrap/css/bootstrap.css to your layout</comment>');
 
-            lessc::ccompile($in, $out);
+        lessc::ccompile($this->path_twitter . 'less/responsive.less', $out . 'bootstrap-responsive.css');
 
-            $output->writeln('<comment>Writing bootstrap'.$version.'.css from bootstrap.less</comment>');
-            $output->writeln('<comment>You can add bundles/ruiantwitterbootstrap/css/bootstrap'.$version.'.css to your layout</comment>');
-        }
-
-        if ('v2' === $version) {
-            $in = __DIR__ . '/../../../../twitter/bootstrap/'.$version.'/less/bootstrap.less';
-            $out = __DIR__ . '/../Resources/public/css/bootstrap' . $version . '.css';
-
-            lessc::ccompile($in, $out);
-
-            $output->writeln('<comment>Writing bootstrap'.$version.'.css from bootstrap.less</comment>');
-            $output->writeln('<comment>You can add bundles/ruiantwitterbootstrap/css/bootstrap'.$version.'.css to your layout</comment>');
-
-            $in = __DIR__ . '/../../../../twitter/bootstrap/'.$version.'/less/responsive.less';
-            $out = __DIR__ . '/../Resources/public/css/bootstrap' . $version . '-responsive.css';
-
-            lessc::ccompile($in, $out);
-
-            $output->writeln('<comment>Writing bootstrap'.$version.'-responsive.css from responsive.less</comment>');
-            $output->writeln('<comment>You can add bundles/ruiantwitterbootstrap/css/bootstrap'.$version.'-responsive.css to your layout</comment>');
-        }
+        $output->writeln('<comment>Writing bootstrap'.$version.'-responsive.css from responsive.less</comment>');
+        $output->writeln('<comment>You can add bundles/ruiantwitterbootstrap/css/bootstrap-responsive.css to your layout</comment>');
 
         return true;
     }
 
-    protected function copyImages($version, $output) {
-        //no images to copy for 1.x bootstrap
+    protected function copyImages($output)
+    {
+        $out = $this->path_resources . 'img/';
 
-        if ('v2' === $version) {
-            if (!is_dir(__DIR__ . '/../Resources/public/img/')) {
-                mkdir(__DIR__ . '/../Resources/public/img/', 0777, true);
-            }
+        if (!is_dir($out)) {
+            mkdir($out, 0777, true);
+        }
 
-            foreach (glob(__DIR__ . '/../../../../twitter/bootstrap/'.$version.'/img/*') as $image) {
-                copy($image, __DIR__ . '/../Resources/public/img/' . basename($image));
-            }
+        foreach (glob($this->path_twitter . '/img/*') as $image) {
+            copy($image, $out . basename($image));
         }
 
         return true;
@@ -108,30 +83,33 @@ class CompilerCommand extends ContainerAwareCommand
 
     protected function writeJs($version, $output)
     {
-        $jsDir = __DIR__ . '/../../../../twitter/bootstrap/'.$version.'/js/';
+        $in = $this->path_twitter . 'js/';
+        $out = $this->path_resources . 'js/';
 
-        if (!is_dir(__DIR__ . '/../Resources/public/js/')) {
-            mkdir(__DIR__ . '/../Resources/public/js/', 0777, true);
+        if (!is_dir($out)) {
+            mkdir($out, 0777, true);
         }
 
         //here we use finder only to add some new files if bootstrap adds them
         //default bootstrap files, order is important
-        $files = array('bootstrap-transition.js',
+        $files = array(
+          'bootstrap-transition.js',
           'bootstrap-alert.js',
-          'bootstrap-button.js',
-          'bootstrap-carousel.js',
-          'bootstrap-collapse.js',
-          'bootstrap-dropdown.js',
           'bootstrap-modal.js',
-          'bootstrap-tooltip.js',
-          'bootstrap-popover.js',
+          'bootstrap-dropdown.js',
           'bootstrap-scrollspy.js',
           'bootstrap-tab.js',
-          'bootstrap-typeahead.js');
+          'bootstrap-tooltip.js',
+          'bootstrap-popover.js',          
+          'bootstrap-button.js',
+          'bootstrap-collapse.js',
+          'bootstrap-carousel.js',
+          'bootstrap-typeahead.js'
+        );
 
         $finder = new Finder();
         $finder->depth('== 0');
-        $finder->files()->in($jsDir)->name('*.js');
+        $finder->files()->in($in)->name('*.js');
 
         foreach ($finder as $file) {
           $baseFile = basename($file);
@@ -144,14 +122,14 @@ class CompilerCommand extends ContainerAwareCommand
         $bootstrapjs = null;
 
         foreach ($files as $file) {
-            $bootstrapjs .= file_get_contents(realpath($jsDir . $file));
+            $bootstrapjs .= file_get_contents(realpath($in . $file));
             $output->writeln('<comment>Adding '.$file.'</comment>');
         }
 
-        file_put_contents(__DIR__ . '/../Resources/public/js/bootstrap'.$version.'.js', $bootstrapjs);
+        file_put_contents($out .'bootstrap.js', $bootstrapjs);
 
-        $output->writeln('<comment>Writing bootstrap'.$version.'.js</comment>');
-        $output->writeln('<comment>You can add bundles/ruiantwitterbootstrap/js/bootstrap'.$version.'.js to your layout</comment>');
+        $output->writeln('<comment>Writing bootstrap.js</comment>');
+        $output->writeln('<comment>You can add bundles/ruiantwitterbootstrap/js/bootstrap.js to your layout</comment>');
 
         return true;
     }
