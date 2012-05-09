@@ -1,41 +1,18 @@
 {
-    "name": "phpugl/twitter-bootstrap-bundle",
+    "name": "ruian/twitter-bootstrap-bundle",
     "type": "symfony-bundle",
     "description": "Twitter Bootstrap bundle for symfony",
     "keywords": ["bootstrap", "css", "js"],
+    "homepage": "https://github.com/ruian/TwitterBootstrapBundle",
+    "license": "MIT",
+    "version": "master",
     "authors": [
         {
             "name": "Julien 'ruian' Galenski"
         },
         {
-          "name": "PHPUGL",
-          "email": "info@phpugl.de"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-              "name": "leafo/lessphp",
-              "version": "0.3.4",
-              "source": {
-                "type": "git",
-                "url": "http://github.com/leafo/lessphp.git",
-                "reference": "origin/master"
-              }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-              "name": "twitter/bootstrap",
-              "version": "master",
-              "source": {
-                "type": "git",
-                "url": "http://github.com/twitter/bootstrap.git",
-                "reference": "origin/master"
-              }
-            }
+            "name": "PHPUGL",
+            "email": "info@phpugl.de"
         }
     ],
     "require": {
@@ -45,7 +22,37 @@
         "leafo/lessphp" : "0.3.*"
     },
     "autoload": {
-        "psr-0": { "PHPUGL\\TwitterBootstrapBundle": "" }
+        "psr-0": { "ruian\\TwitterBootstrapBundle": "" }
     },
-    "target-dir": "PHPUGL/TwitterBootstrapBundle"
+    "target-dir": "ruian/TwitterBootstrapBundle",    
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "leafo/lessphp",
+                "version": "0.3.4",
+                "source": {
+                    "url": "https://github.com/leafo/lessphp.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "twitter/bootstrap",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/twitter/bootstrap.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/twitter/bootstrap/zipball/master",
+                    "type": "zip"
+                }
+            }
+        }
+    ]
 }
