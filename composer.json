@@ -15,34 +15,26 @@
             "email": "info@phpugl.de"
         }
     ],
+    "autoload": {
+        "psr-0": { 
+          "ruian\\TwitterBootstrapBundle": "" 
+        }
+    },
+    "target-dir": "ruian/TwitterBootstrapBundle",
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": "2.*",
+        "symfony/framework-bundle": "2.*"
+    },
+    "suggest": {
         "twitter/bootstrap": "dev-master",
-        "leafo/lessphp" : "0.3.*"
-    },
-    "autoload": {
-        "psr-0": { "ruian\\TwitterBootstrapBundle": "" }
-    },
-    "target-dir": "ruian/TwitterBootstrapBundle",    
+        "leafo/lessphp" : "dev-master"
+    },    
     "repositories": [
         {
             "type": "package",
             "package": {
-                "name": "leafo/lessphp",
-                "version": "0.3.4",
-                "source": {
-                    "url": "https://github.com/leafo/lessphp.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "twitter/bootstrap",
                 "version": "dev-master",
+                "name": "twitter/bootstrap",
                 "source": {
                     "url": "https://github.com/twitter/bootstrap.git",
                     "type": "git",
@@ -51,7 +43,23 @@
                 "dist": {
                     "url": "https://github.com/twitter/bootstrap/zipball/master",
                     "type": "zip"
-                }
+                 }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "leafo/lessphp",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/leafo/lessphp.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/leafo/lessphp/zipball/master",
+                    "type": "zip"
+                 }
             }
         }
     ]
