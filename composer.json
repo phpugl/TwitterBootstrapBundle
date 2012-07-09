@@ -62,5 +62,6 @@
             "../../leafo/lessphp/lessc.inc.php"
         ]
     },
+    "minimum-stability": "dev",
     "target-dir": "Ruian/TwitterBootstrapBundle"
 }
