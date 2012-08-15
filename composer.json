@@ -36,22 +36,6 @@
                     "reference": "master"
                 }
             }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "leafo/lessphp",
-                "version": "master",
-                "dist": {
-                    "url": "https://github.com/leafo/lessphp/zipball/master",
-                    "type": "zip"
-                },
-                "source": {
-                    "url": "https://github.com/leafo/lessphp.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
         }
     ],
     "autoload": {
