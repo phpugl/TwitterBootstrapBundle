@@ -53,15 +53,19 @@ class CompilerCommand extends ContainerAwareCommand
             mkdir($out, 0777, true);
         }
         
-        lessc::ccompile($this->path_twitter . 'less/bootstrap.less', $out . 'bootstrap.css');
+        $less = new lessc;
 
         $output->writeln('<comment>Writing bootstrap.css from bootstrap.less</comment>');
-        $output->writeln('<comment>You can add bundles/ruiantwitterbootstrap/css/bootstrap.css to your layout</comment>');
-
-        lessc::ccompile($this->path_twitter . 'less/responsive.less', $out . 'bootstrap-responsive.css');
-
-        $output->writeln('<comment>Writing bootstrap-responsive.css from responsive.less</comment>');
-        $output->writeln('<comment>You can add bundles/ruiantwitterbootstrap/css/bootstrap-responsive.css to your layout</comment>');
+        $less->compileFile($this->path_twitter . 'less/bootstrap.less', $out . 'bootstrap.css');
+        $output->writeln('<comment>Writing bootstrap-responsive.css from bootstrap-responsive.less</comment>');
+        $less->compileFile($this->path_twitter . 'less/responsive.less', $out . 'bootstrap-responsive.css');
+        
+        
+        $less->setFormatter("compressed");
+        $output->writeln('<comment>Writing bootstrap.min.css from bootstrap.min.less</comment>');
+        $less->compileFile($this->path_twitter . 'less/bootstrap.less', $out . 'bootstrap.min.css');
+        $output->writeln('<comment>Writing bootstrap-responsive.min.css from bootstrap-responsive.min.less</comment>');
+        $less->compileFile($this->path_twitter . 'less/responsive.less', $out . 'bootstrap-responsive.min.css');
 
         return true;
     }
@@ -92,6 +96,7 @@ class CompilerCommand extends ContainerAwareCommand
 
         //here we use finder only to add some new files if bootstrap adds them
         //default bootstrap files, order is important
+        
         $files = array(
           'bootstrap-transition.js',
           'bootstrap-alert.js',
@@ -100,7 +105,7 @@ class CompilerCommand extends ContainerAwareCommand
           'bootstrap-scrollspy.js',
           'bootstrap-tab.js',
           'bootstrap-tooltip.js',
-          'bootstrap-popover.js',          
+          'bootstrap-popover.js',
           'bootstrap-button.js',
           'bootstrap-collapse.js',
           'bootstrap-carousel.js',
