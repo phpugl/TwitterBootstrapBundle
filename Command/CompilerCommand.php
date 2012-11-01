@@ -109,7 +109,8 @@ class CompilerCommand extends ContainerAwareCommand
           'bootstrap-button.js',
           'bootstrap-collapse.js',
           'bootstrap-carousel.js',
-          'bootstrap-typeahead.js'
+          'bootstrap-typeahead.js',
+          'bootstrap-affix.js'
         );
 
         $finder = new Finder();
